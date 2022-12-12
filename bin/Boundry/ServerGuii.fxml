@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="451.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Boundry.ServerGuiController">
+   <children>
+      <AnchorPane prefHeight="451.0" prefWidth="286.0" style="-fx-background-color: #3DB8B8;" />
+      <TableView fx:id="table" layoutX="307.0" layoutY="58.0" prefHeight="175.0" prefWidth="351.0">
+        <columns>
+          <TableColumn fx:id="ip_column" prefWidth="125.0" text="IP" />
+          <TableColumn fx:id="host_column" prefWidth="135.0" text="HOST" />
+            <TableColumn fx:id="status_column" prefWidth="92.0" text="STATUS" />
+        </columns>
+      </TableView>
+      <Button fx:id="exit_btn" layoutX="25.0" layoutY="406.0" mnemonicParsing="false" onAction="#pressExit" prefHeight="31.0" prefWidth="83.0" style="-fx-background-color: #C7E9BE;" text="Exit" />
+      <Label layoutX="393.0" layoutY="21.0" text="Connected Clients:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="58.0" text="IP:" textFill="WHITE" />
+      <Label layoutX="18.0" layoutY="102.0" text="Port:" textFill="WHITE" />
+      <Label layoutX="17.0" layoutY="146.0" text="DB Name:" textFill="WHITE" />
+      <Label layoutX="17.0" layoutY="195.0" text="DB User Name:" textFill="WHITE" />
+      <Label layoutX="17.0" layoutY="249.0" text="DB Password:" textFill="WHITE" />
+      <TextField fx:id="ip" layoutX="86.0" layoutY="54.0" promptText="192.168.22.3" />
+      <TextField fx:id="port" layoutX="86.0" layoutY="98.0" promptText="5555" />
+      <TextField fx:id="db_name" layoutX="86.0" layoutY="142.0" promptText="&quot;jdbc:mysql://localhost/project?serverTimezone=IST&quot;" />
+      <TextField fx:id="db_user_name" layoutX="118.0" layoutY="191.0" promptText="root" />
+      <PasswordField fx:id="db_password" layoutX="112.0" layoutY="245.0" />
+      <Button fx:id="connect_btn" layoutX="72.0" layoutY="308.0" mnemonicParsing="false" onAction="#pressConnect" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #C7E9BE;" text="Connect" />
+      <Button fx:id="disconnect_btn" layoutX="72.0" layoutY="356.0" mnemonicParsing="false" onAction="#pressDisconnect" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #C7E9BE;" text="Disconnect" />
+      <TextArea fx:id="textarea_console" layoutX="322.0" layoutY="266.0" prefHeight="168.0" prefWidth="322.0" />
+      <Label layoutX="469.0" layoutY="241.0" text="Console:" />
+      <Label layoutX="36.0" layoutY="20.0" text="Server Configuration" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
