@@ -66,6 +66,43 @@ public class DB_Connection {
 		}
 
 	}
+	
+	public static ArrayList<String> checkUserNameAndPassword(ArrayList<String> data) {
+		Statement stmt;
+		ArrayList<String> subscriber = new ArrayList<>();
+		String userName = data.get(0);
+		String password = data.get(1);
+		String datafromdb = "";
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT firstName,lastName,role,isLoggedIn FROM project.users where userName =" + userName + "and password =" + password  + ";");
+			while (rs.next()) {
+				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
+			}
+			if (datafromdb.length() > 1) {
+				String[] arrOfSub = ((String) datafromdb).split(" ");
+
+				subscriber.add(arrOfSub[0]);
+				subscriber.add(arrOfSub[1]);
+				subscriber.add(arrOfSub[2]);
+				subscriber.add(arrOfSub[3]);
+				rs.close();
+			}
+			else {
+				subscriber.add("Error");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return subscriber;
+	}
+	
+	
+	
+	
+	
 
 	
 	/**

@@ -18,6 +18,10 @@ import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
 public class EchoServer extends AbstractServer {
+	
+	
+	
+	
 	// Class variables *************************************************
 			static Connection conn;
 			private ArrayList<ConnectionToClient> clientConnected = new ArrayList<>();
@@ -60,6 +64,7 @@ public class EchoServer extends AbstractServer {
 					
 					ArrayList<String> data = (ArrayList<String>) msg;
 					ArrayList<String> back = new ArrayList<>();
+					back.clear();
 					
 					String action = data.get(0);
 					switch (action) {
@@ -67,6 +72,7 @@ public class EchoServer extends AbstractServer {
 						System.out.println("Message received: " + msg + " from " + client);
 						data.remove(0);
 						DB_Connection.saveSubscriber(data);
+						data.clear();
 						break;
 
 					case "display":
@@ -74,7 +80,8 @@ public class EchoServer extends AbstractServer {
 						data.remove(0);
 						ArrayList<String> S = DB_Connection.getSubscriber(data);
 						S.add(0,"display");
-						client.sendToClient(S);										
+						client.sendToClient(S);	
+						data.clear();
 						break;
 
 					case "update":
@@ -83,6 +90,7 @@ public class EchoServer extends AbstractServer {
 						DB_Connection.Update(data);
 						back.add("update");
 						client.sendToClient(back);
+						data.clear();
 						break;
 					case "quit":
 						System.out.println("Message received: " + msg + " from " + client);
@@ -90,6 +98,15 @@ public class EchoServer extends AbstractServer {
 						clientDisconnected(client);
 						back.add("quit");
 						client.sendToClient(back);
+						data.clear();
+					case "UserNameAndPasswordCheck":
+						System.out.println("Message received: " + msg + " from " + client);
+						data.remove(0);
+						ArrayList<String> userNameAndPasswordRetVal = DB_Connection.checkUserNameAndPassword(data);
+						userNameAndPasswordRetVal.add(0,"userNameAndPasswordRetVal");
+						client.sendToClient(userNameAndPasswordRetVal);
+						data.clear();
+						break;
 						
 					default:
 						throw new Exception("Invalid operation");
