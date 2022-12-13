@@ -41,6 +41,7 @@ public class EchoServer extends AbstractServer {
 			public EchoServer(int port) {
 				super(port);
 				
+				
 				try {
 					ip = InetAddress.getLocalHost();
 					host = ip.getHostName();
@@ -106,6 +107,14 @@ public class EchoServer extends AbstractServer {
 						userNameAndPasswordRetVal.add(0,"userNameAndPasswordRetVal");
 						client.sendToClient(userNameAndPasswordRetVal);
 						data.clear();
+						break;
+					case "signOutUser":
+						System.out.println("Message received: " + msg + " from " + client);
+						data.remove(0);
+						DB_Connection.signOutUser(data);
+						data.clear();
+						back.add("signOutUser");
+						client.sendToClient(back);
 						break;
 						
 					default:

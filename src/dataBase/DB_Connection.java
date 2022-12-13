@@ -24,6 +24,7 @@ public class DB_Connection {
 	
 	public static void connectDB(String password,String dbUserNameRoot,String dbName) {
 		try {
+			
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			System.out.println("Driver definition succeed");
 		} catch (Exception ex) {
@@ -48,6 +49,94 @@ public class DB_Connection {
 	 * the info arriving in ArrayList 
 	 * @param data
 	 */
+	
+	
+	public static void signOutUser(ArrayList<String> data) {
+		
+		try {
+			PreparedStatement ps = conn
+					.prepareStatement("update users set isLoggedIn = ?  where userName = ?;");
+			ps.setString(1, "0");
+			ps.setString(2, data.get(0));
+			ps.executeUpdate(); 
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
+	
+	
+	public static ArrayList<String> checkUserNameAndPassword(ArrayList<String> data) {
+		Statement stmt;
+		ArrayList<String> subscriber = new ArrayList<>();
+		String userName = data.get(0);
+		String password = data.get(1);
+		String datafromdb = "";
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT firstName,lastName,role,isLoggedIn FROM project.users where userName = '" + userName + "'and password = '" + password  + "';");
+			while (rs.next()) {
+				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
+			}
+			if (datafromdb.length() > 1) {
+				String[] arrOfSub = ((String) datafromdb).split(" ");
+
+				subscriber.add(arrOfSub[0]);
+				subscriber.add(arrOfSub[1]);
+				subscriber.add(arrOfSub[2]);
+				subscriber.add(arrOfSub[3]);
+				PreparedStatement ps = conn
+						.prepareStatement("update users set isLoggedIn = ?  where userName = ?;");
+				ps.setString(1, "1");
+				ps.setString(2, userName);
+				ps.executeUpdate(); 
+				ps.close();
+				rs.close();
+			}
+			else {
+				subscriber.add("Error");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return subscriber;
+	}
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static void saveSubscriber(ArrayList<String> data) {
 		try {
 
@@ -66,45 +155,6 @@ public class DB_Connection {
 		}
 
 	}
-	
-	public static ArrayList<String> checkUserNameAndPassword(ArrayList<String> data) {
-		Statement stmt;
-		ArrayList<String> subscriber = new ArrayList<>();
-		String userName = data.get(0);
-		String password = data.get(1);
-		String datafromdb = "";
-		try {
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT firstName,lastName,role,isLoggedIn FROM project.users where userName =" + userName + "and password =" + password  + ";");
-			while (rs.next()) {
-				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
-			}
-			if (datafromdb.length() > 1) {
-				String[] arrOfSub = ((String) datafromdb).split(" ");
-
-				subscriber.add(arrOfSub[0]);
-				subscriber.add(arrOfSub[1]);
-				subscriber.add(arrOfSub[2]);
-				subscriber.add(arrOfSub[3]);
-				rs.close();
-			}
-			else {
-				subscriber.add("Error");
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return subscriber;
-	}
-	
-	
-	
-	
-	
-
-	
 	/**
 	 * function that get data to extract from db and return all the requested data of user
 	 * @param data
@@ -133,6 +183,7 @@ public class DB_Connection {
 				Sub.add(arrOfSub[4]);
 				Sub.add(arrOfSub[5]);
 				Sub.add(arrOfSub[6]);
+				
 				rs.close();
 			}
 			else {
