@@ -51,13 +51,13 @@ public class DB_Connection {
 	 */
 	
 	
-	public static void signOutUser(ArrayList<String> data) {
+	public static void signOutUser(String data) {
 		
 		try {
 			PreparedStatement ps = conn
 					.prepareStatement("update users set isLoggedIn = ?  where userName = ?;");
 			ps.setString(1, "0");
-			ps.setString(2, data.get(0));
+			ps.setString(2, data);
 			ps.executeUpdate(); 
 			ps.close();
 		} catch (SQLException e) {

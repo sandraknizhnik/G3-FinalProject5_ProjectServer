@@ -4,7 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 
 import Boundry.ServerGuiController;
 import dataBase.DB_Connection;
@@ -29,7 +30,7 @@ public class EchoServer extends AbstractServer {
 			private InetAddress ip;
 			final public static int DEFAULT_PORT = 5555;
 			String DBPassword;
-			
+			private Map<ConnectionToClient,String> userNamesOfUsers = new HashMap<>();
 			
 		//****************************************************************	
 			
@@ -62,63 +63,78 @@ public class EchoServer extends AbstractServer {
 			
 			public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 				try {
-					
+					@SuppressWarnings("unchecked")
 					ArrayList<String> data = (ArrayList<String>) msg;
+					String userName;
 					ArrayList<String> back = new ArrayList<>();
 					back.clear();
-					
-					String action = data.get(0);
-					switch (action) {
-					case "insert":
-						System.out.println("Message received: " + msg + " from " + client);
-						data.remove(0);
-						DB_Connection.saveSubscriber(data);
-						data.clear();
-						break;
-
-					case "display":
-						System.out.println("Message received: " + msg + " from " + client);
-						data.remove(0);
-						ArrayList<String> S = DB_Connection.getSubscriber(data);
-						S.add(0,"display");
-						client.sendToClient(S);	
-						data.clear();
-						break;
-
-					case "update":
-						System.out.println("Message received: " + msg + " from " + client);
-						data.remove(0);
-						DB_Connection.Update(data);
-						back.add("update");
-						client.sendToClient(back);
-						data.clear();
-						break;
-					case "quit":
-						System.out.println("Message received: " + msg + " from " + client);
-						data.remove(0);
-						clientDisconnected(client);
-						back.add("quit");
-						client.sendToClient(back);
-						data.clear();
-					case "UserNameAndPasswordCheck":
-						System.out.println("Message received: " + msg + " from " + client);
-						data.remove(0);
-						ArrayList<String> userNameAndPasswordRetVal = DB_Connection.checkUserNameAndPassword(data);
-						userNameAndPasswordRetVal.add(0,"userNameAndPasswordRetVal");
-						client.sendToClient(userNameAndPasswordRetVal);
-						data.clear();
-						break;
-					case "signOutUser":
-						System.out.println("Message received: " + msg + " from " + client);
-						data.remove(0);
-						DB_Connection.signOutUser(data);
-						data.clear();
-						back.add("signOutUser");
-						client.sendToClient(back);
-						break;
+					if(data.size()>0) {
+						String action = data.get(0);
+						switch (action) {
+						case "quit":
+								System.out.println("Message received: " + msg + " from " + client);
+								data.remove(0);
+								userName = userNamesOfUsers.get(client);
+								userNamesOfUsers.remove(client);
+								DB_Connection.signOutUser(userName);
+								clientDisconnected(client);
+								back.add("quit");
+								client.sendToClient(back);
+								data.clear();
+								break;
+							
+						case "UserNameAndPasswordCheck":
+							System.out.println("Message received: " + msg + " from " + client);
+							data.remove(0);
+							ArrayList<String> userNameAndPasswordRetVal = DB_Connection.checkUserNameAndPassword(data);
+							if(!data.get(0).equals("Error")) {
+								userNamesOfUsers.put(client, data.get(0));
+							}
+							userNameAndPasswordRetVal.add(0,"userNameAndPasswordRetVal");
+							client.sendToClient(userNameAndPasswordRetVal);
+							data.clear();
+							break;
+						case "SignOut":
+							System.out.println("Message received: " + msg + " from " + client);
+							data.remove(0);
+							userName = userNamesOfUsers.get(client);
+							userNamesOfUsers.remove(client);
+							DB_Connection.signOutUser(userName);
+							back.add("SignOut");
+							client.sendToClient(back);
+							data.clear();
+							break;
 						
-					default:
-						throw new Exception("Invalid operation");
+							/*case "insert":
+							System.out.println("Message received: " + msg + " from " + client);
+							data.remove(0);
+							DB_Connection.saveSubscriber(data);
+							data.clear();
+							break;
+
+						case "display":
+							System.out.println("Message received: " + msg + " from " + client);
+							data.remove(0);
+							ArrayList<String> S = DB_Connection.getSubscriber(data);
+							S.add(0,"display");
+							client.sendToClient(S);	
+							data.clear();
+							break;
+
+						case "update":
+							System.out.println("Message received: " + msg + " from " + client);
+							data.remove(0);
+							DB_Connection.Update(data);
+							back.add("update");
+							client.sendToClient(back);
+							data.clear();
+							break;*/
+							
+						default:
+							throw new Exception("Invalid operation");
+						
+					}
+					
 					}
 
 				} catch (Exception ex) {
