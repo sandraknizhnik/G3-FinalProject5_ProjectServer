@@ -49,6 +49,37 @@ public class DB_Connection {
 	 * the info arriving in ArrayList 
 	 * @param data
 	 */
+	public static ArrayList<String> getUserData(String userName) {
+		ArrayList<String> userData = new ArrayList<>();
+		Statement stmt;
+		String datafromdb = "";
+		
+		try {
+			
+			
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT userName,firstName,lastName, userStatus FROM project.users where userName = '" + userName +  "';");
+			while (rs.next()) {
+				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
+			}
+			if (datafromdb.length() > 1) {
+				String[] arrOfSub = ((String) datafromdb).split(" ");
+
+				userData.add(arrOfSub[0]);
+				userData.add(arrOfSub[1]);
+				userData.add(arrOfSub[2]);
+				userData.add(arrOfSub[3]);
+				rs.close();
+			}
+			else {
+				userData.add("Error");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	return userData;
+	}
 	
 	
 	public static void signOutUser(String data) {
