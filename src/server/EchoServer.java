@@ -111,6 +111,14 @@ public class EchoServer extends AbstractServer {
 							client.sendToClient(userData);
 							data.clear();
 							break;
+						case "CheckUserNameIsntExist":
+							System.out.println("Message received: " + msg + " from " + client);
+							data.remove(0);
+							ArrayList<String> StatusOfUserName = DB_Connection.addNewCustomer(data);
+							StatusOfUserName.add(0,"CheckUserNameIsntExist");
+							client.sendToClient(StatusOfUserName);
+							data.clear();
+							break;
 						
 							/*case "insert":
 							System.out.println("Message received: " + msg + " from " + client);

@@ -58,9 +58,13 @@ public class DB_Connection {
 			
 			
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT userName,firstName,lastName, userStatus FROM project.users where userName = '" + userName +  "';");
+			ResultSet rs = stmt.executeQuery("SELECT userName,firstName,lastName FROM project.users where userName = '" + userName +  "';");
 			while (rs.next()) {
-				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
+				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3);
+			}
+			rs = stmt.executeQuery("SELECT status FROM project.customer where userName = '" + userName +  "';");
+			while (rs.next()) {
+				datafromdb = datafromdb + " " + rs.getString(1);
 			}
 			if (datafromdb.length() > 1) {
 				String[] arrOfSub = ((String) datafromdb).split(" ");
@@ -80,6 +84,53 @@ public class DB_Connection {
 		}
 	return userData;
 	}
+	
+	public static ArrayList<String> addNewCustomer(ArrayList<String> data) throws SQLException{
+		Statement stmt;
+		String datafromdb = "";
+		ArrayList<String> retVal = new ArrayList<>();
+		stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT userName FROM project.users where userName = '" + data.get(0) +  "';");
+		while (rs.next()) {
+			datafromdb = rs.getString(1);
+		}
+		if(datafromdb.length() >= 1) {
+			retVal.add("Error");
+			return retVal;
+		}
+		rs.close();
+		PreparedStatement ps = conn.prepareStatement("insert into users values(?,?,?,?,?,?,?,?,?,null)");
+		ps.setString(1, data.get(0));// userName
+		ps.setString(2, data.get(1));// passWord
+		ps.setString(3, data.get(2));// firstName
+		ps.setString(4, data.get(3));// lastName
+		ps.setString(5, data.get(4));// role
+		ps.setString(6, data.get(5));// email
+		ps.setString(7, data.get(6));// phoneNumber
+		ps.setString(8, data.get(7));// isLogIn
+		ps.setString(9, data.get(8));// ID
+		ps.executeUpdate();
+		
+		
+		
+		ps = conn.prepareStatement("insert into customer values(?,?,?,?,?,?,?)");
+		ps.setString(1, data.get(0));// userName
+		ps.setString(2, data.get(9));// status
+		ps.setInt(3, 12);
+		ps.setString(4, data.get(10));// isAMember
+		ps.setString(5, data.get(11));// cardNumber
+		ps.setString(6, data.get(12));// expierdDate
+		ps.setString(7, data.get(13));// cvv
+
+		ps.executeUpdate();
+		ps.close();
+		retVal.add("Inserted");
+		return retVal;
+		
+		
+	}
+	
+	
 	
 	
 	public static void signOutUser(String data) {
