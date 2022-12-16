@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class DB_Connection {
 	
 	// Class variables *************************************************
@@ -82,6 +85,24 @@ public class DB_Connection {
 			e.printStackTrace();
 		}
 	return userData;
+	}
+	
+	//function that activates getUserData to get area and returns the machine's number for specific area
+	public static ArrayList<String> getMachineData(String userName) {
+		ArrayList<String> storeMachineData = getUserData(userName);
+		ArrayList<String> machineNumber = new ArrayList<>();
+		Statement stmt;
+		
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT machineNumber FROM project.machines where location = '" + storeMachineData.get(4) +  "';");
+			while (rs.next()) {
+				machineNumber.add(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	return machineNumber;
 	}
 	
 	

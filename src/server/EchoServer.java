@@ -9,7 +9,7 @@ import java.util.Map;
 
 import Boundry.ServerGuiController;
 import dataBase.DB_Connection;
-
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import logic.ClientConnected;
 
@@ -111,11 +111,18 @@ public class EchoServer extends AbstractServer {
 							client.sendToClient(userData);
 							data.clear();
 							break;
-						case "getUserDataAreaManager":
+						case "getUserDataAreaManager": //for area manager screen home page
 							userName = userNamesOfUsers.get(client);
 							ArrayList<String> areaManagerData = DB_Connection.getUserData(userName);
 							areaManagerData.add(0,"getUserDataAreaManager");
 							client.sendToClient(areaManagerData);
+							data.clear();
+							break;
+						case "getMachineNumber": //to get machine number for specific area
+							userName = userNamesOfUsers.get(client);
+							ArrayList<String> machineNumberData = DB_Connection.getMachineData(userName);
+							machineNumberData.add(0,"getMachineNumber");
+							client.sendToClient(machineNumberData);
 							data.clear();
 							break;
 						
