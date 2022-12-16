@@ -58,18 +58,21 @@ public class DB_Connection {
 			
 			
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT userName,firstName,lastName, userStatus FROM project.users where userName = '" + userName +  "';");
+			ResultSet rs = stmt.executeQuery("SELECT userName,firstName,lastName,userStatus,storeName FROM project.users where userName = '" + userName +  "';");
 			while (rs.next()) {
-				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
+				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4)+ " " + rs.getString(5);
 			}
 			if (datafromdb.length() > 1) {
 				String[] arrOfSub = ((String) datafromdb).split(" ");
 
-				userData.add(arrOfSub[0]);
-				userData.add(arrOfSub[1]);
-				userData.add(arrOfSub[2]);
-				userData.add(arrOfSub[3]);
+				userData.add(arrOfSub[0]); //userName
+				userData.add(arrOfSub[1]); //firstName
+				userData.add(arrOfSub[2]); //lastName
+				userData.add(arrOfSub[3]); //userStatus
+				userData.add(arrOfSub[4]); //storeName
+				System.out.println(userData);
 				rs.close();
+				
 			}
 			else {
 				userData.add("Error");

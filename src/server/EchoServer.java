@@ -111,6 +111,13 @@ public class EchoServer extends AbstractServer {
 							client.sendToClient(userData);
 							data.clear();
 							break;
+						case "getUserDataAreaManager":
+							userName = userNamesOfUsers.get(client);
+							ArrayList<String> areaManagerData = DB_Connection.getUserData(userName);
+							areaManagerData.add(0,"getUserDataAreaManager");
+							client.sendToClient(areaManagerData);
+							data.clear();
+							break;
 						
 							/*case "insert":
 							System.out.println("Message received: " + msg + " from " + client);
