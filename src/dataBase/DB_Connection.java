@@ -119,8 +119,6 @@ public class DB_Connection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
 	
