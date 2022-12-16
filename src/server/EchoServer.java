@@ -9,7 +9,9 @@ import java.util.Map;
 
 import Boundry.ServerGuiController;
 import dataBase.DB_Connection;
-
+import entity.Item;
+import entity.ItemRequest;
+import entity.ItemRespose;
 import javafx.event.Event;
 import logic.ClientConnected;
 
@@ -63,6 +65,21 @@ public class EchoServer extends AbstractServer {
 			
 			public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 				try {
+					
+					if(msg instanceof ItemRequest){
+						ItemRequest itemRequest = (ItemRequest)msg;
+						int serialNum = itemRequest.getSerialNum();
+						/**
+						 * go to db to get data of items  -we will get array of items 
+						 * 
+						 */
+						Item[] items = null; 
+						client.sendToClient(new ItemRespose(items));
+						return;
+					}
+					
+					
+					
 					@SuppressWarnings("unchecked")
 					ArrayList<String> data = (ArrayList<String>) msg;
 					String userName;
@@ -243,11 +260,7 @@ public class EchoServer extends AbstractServer {
 					if(clientTemp.getInetAddress().getHostName().equals(client.getInetAddress().getHostName())) {
 						clientConnected.remove(clientTemp);
 						break;
-					}
-				}
-				ServerUI serverUI = ServerUI.getInstance();
-				serverUI.tableViewList.clear();
-				serverUI.tableViewList.add(new ClientConnected(client.getInetAddress().getHostAddress(),client.getInetAddress().getHostName(),"Disconnected"));
+					}5RRRRRRR7s().getHostAddress(),client.getInetAddress().getHostName(),"Disconnected"));
 				
 		    }
 
