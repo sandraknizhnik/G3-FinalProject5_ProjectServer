@@ -102,6 +102,7 @@ public class DB_Connection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		machineNumber.add(storeMachineData.get(4)); //adding to machineNumber the area(storeName)
 	return machineNumber;
 	}
 	
