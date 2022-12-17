@@ -61,19 +61,18 @@ public class DB_Connection {
 			
 			
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT userName,firstName,lastName,userStatus,storeName FROM project.users where userName = '" + userName +  "';");
+			ResultSet rs = stmt.executeQuery("SELECT userName,firstName,lastName,storeName FROM project.users where userName = '" + userName +  "';");
 			while (rs.next()) {
-				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4)+ " " + rs.getString(5);
+				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3)+ " " + rs.getString(4);
 			}
+			System.out.println(datafromdb);
 			if (datafromdb.length() > 1) {
 				String[] arrOfSub = ((String) datafromdb).split(" ");
 
 				userData.add(arrOfSub[0]); //userName
 				userData.add(arrOfSub[1]); //firstName
 				userData.add(arrOfSub[2]); //lastName
-				userData.add(arrOfSub[3]); //userStatus
-				userData.add(arrOfSub[4]); //storeName
-				System.out.println(userData);
+				userData.add(arrOfSub[3]); //storeName
 				rs.close();
 				
 			}
@@ -95,14 +94,14 @@ public class DB_Connection {
 		
 		try {
 			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT machineNumber FROM project.machines where location = '" + storeMachineData.get(4) +  "';");
+			ResultSet rs = stmt.executeQuery("SELECT machineNumber FROM project.machines where location = '" + storeMachineData.get(3) +  "';");
 			while (rs.next()) {
 				machineNumber.add(rs.getString(1));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		machineNumber.add(storeMachineData.get(4)); //adding to machineNumber the area(storeName)
+		machineNumber.add(storeMachineData.get(3)); //adding to machineNumber the area(storeName)
 	return machineNumber;
 	}
 	
