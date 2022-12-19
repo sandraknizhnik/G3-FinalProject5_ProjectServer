@@ -104,13 +104,21 @@ public class EchoServer extends AbstractServer {
 							client.sendToClient(back);
 							data.clear();
 							break;
-						case "getUserData":
+						case "getUserDataCustomer":
 							userName = userNamesOfUsers.get(client);
 							ArrayList<String> userData = DB_Connection.getUserData(userName);
-							userData.add(0,"getUserData");
+							userData.add(0,"getUserDataCustomer");
 							client.sendToClient(userData);
 							data.clear();
 							break;
+						case "getUserDataServiceRep":
+							userName = userNamesOfUsers.get(client);
+							ArrayList<String> userData1 = DB_Connection.getUserData(userName);
+							userData1.add(0,"getUserDataServiceRep");
+							client.sendToClient(userData1);
+							data.clear();
+							break;
+							
 						case "CheckUserNameIsntExist":
 							System.out.println("Message received: " + msg + " from " + client);
 							data.remove(0);

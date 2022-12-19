@@ -56,7 +56,6 @@ public class DB_Connection {
 		
 		try {
 			
-			
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT userName,firstName,lastName FROM project.users where userName = '" + userName +  "';");
 			while (rs.next()) {
@@ -68,11 +67,9 @@ public class DB_Connection {
 			}
 			if (datafromdb.length() > 1) {
 				String[] arrOfSub = ((String) datafromdb).split(" ");
-
-				userData.add(arrOfSub[0]);
-				userData.add(arrOfSub[1]);
-				userData.add(arrOfSub[2]);
-				userData.add(arrOfSub[3]);
+				for(int i=0;i<arrOfSub.length;i++) {
+					userData.add(arrOfSub[i]);
+				}
 				rs.close();
 			}
 			else {
