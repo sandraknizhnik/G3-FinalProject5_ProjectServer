@@ -115,7 +115,7 @@ public class DB_Connection {
 		String year = data.get(2);
 		
 		String datafromdb = "";
-		
+		int j=1;
 		try {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT listOfItems,numOfTotalOrders,numOfCanceledOrders,mostWantedItemName, machineNumber,storeName FROM project.monthlyordersreports"
@@ -123,15 +123,23 @@ public class DB_Connection {
 			while (rs.next()) {
 				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4)+ " " + rs.getString(5)+ " " + rs.getString(6);
 			}
+			
+			
 			if (datafromdb.length() > 1) {
 				String[] arrOfSub = ((String) datafromdb).split(" ");
 
-				orderData.add(arrOfSub[0]);
+				for(int i=0; i<arrOfSub.length; i++) {
+					orderData.add(arrOfSub[i]);
+				}
+				/*orderData.add(arrOfSub[0]);
 				orderData.add(arrOfSub[1]);
 				orderData.add(arrOfSub[2]);
 				orderData.add(arrOfSub[3]);
 				orderData.add(arrOfSub[4]);
 				orderData.add(arrOfSub[5]);
+				orderData.add(arrOfSub[6]);
+				//orderData.add(arrOfSub[7]);**/
+				//System.out.println("blablabla111 "+ orderData.get(0));
 				rs.close();
 			}
 			else {
@@ -141,6 +149,7 @@ public class DB_Connection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		//System.out.println("blablabla222 "+ orderData);
 		return orderData;
 	}
 	
