@@ -65,7 +65,7 @@ public class DB_Connection {
 			while (rs.next()) {
 				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3)+ " " + rs.getString(4);
 			}
-			System.out.println(datafromdb);
+
 			if (datafromdb.length() > 1) {
 				String[] arrOfSub = ((String) datafromdb).split(" ");
 
@@ -104,6 +104,48 @@ public class DB_Connection {
 		machineNumber.add(storeMachineData.get(3)); //adding to machineNumber the area(storeName)
 	return machineNumber;
 	}
+	
+	//function to get from data base oder report data
+	public static ArrayList<String> getOrderReportData(ArrayList<String> data) {
+		Statement stmt;
+		ArrayList<String> orderData = new ArrayList<>();
+		
+		String machineNumber = data.get(0);
+		String month = data.get(1);
+		String year = data.get(2);
+		
+		String datafromdb = "";
+		
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT listOfItems,numOfTotalOrders,numOfCanceledOrders,mostWantedItemName, machineNumber,storeName FROM project.monthlyordersreports"
+					+ " where machineNumber = '" + machineNumber  + "'and month = '" + month + "'and year = '" + year +"';");
+			while (rs.next()) {
+				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4)+ " " + rs.getString(5)+ " " + rs.getString(6);
+			}
+			if (datafromdb.length() > 1) {
+				String[] arrOfSub = ((String) datafromdb).split(" ");
+
+				orderData.add(arrOfSub[0]);
+				orderData.add(arrOfSub[1]);
+				orderData.add(arrOfSub[2]);
+				orderData.add(arrOfSub[3]);
+				orderData.add(arrOfSub[4]);
+				orderData.add(arrOfSub[5]);
+				rs.close();
+			}
+			else {
+				orderData.add("Error");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return orderData;
+	}
+	
+	
+	
 	
 	
 	public static void signOutUser(String data) {
