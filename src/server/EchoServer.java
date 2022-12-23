@@ -136,6 +136,28 @@ public class EchoServer extends AbstractServer {
 							client.sendToClient(orderReportData);
 							data.clear();
 							break;
+						case "getCustomersReportDetails": //get order report details
+							userName = userNamesOfUsers.get(client);
+							System.out.println("Message received: " + msg + " from " + client);
+							data.remove(0);
+							ArrayList<String> costumerReportData = DB_Connection.getCustomersReportData(data);
+							
+							System.out.println(costumerReportData);
+							costumerReportData.add(0,"getCustomersReportDetails");
+							client.sendToClient(costumerReportData);
+							data.clear();
+							break;
+						/*case "getInventoryReportDetails": //get order report details
+							userName = userNamesOfUsers.get(client);
+							System.out.println("Message received: " + msg + " from " + client);
+							data.remove(0);
+							ArrayList<String> inventoryReportData = DB_Connection.getInventoryReportData(data);
+							
+							System.out.println(inventoryReportData);
+							inventoryReportData.add(0,"getInventoryReportDetails");
+							client.sendToClient(inventoryReportData);
+							data.clear();
+							break;*/
 						
 							/*case "insert":
 							System.out.println("Message received: " + msg + " from " + client);

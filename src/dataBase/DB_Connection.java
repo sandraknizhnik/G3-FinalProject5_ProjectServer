@@ -105,6 +105,7 @@ public class DB_Connection {
 	return machineNumber;
 	}
 	
+	
 	//function to get from data base oder report data
 	public static ArrayList<String> getOrderReportData(ArrayList<String> data) {
 		Statement stmt;
@@ -154,7 +155,53 @@ public class DB_Connection {
 	}
 	
 	
-	
+	//function to get from data base costumer report data
+	public static ArrayList<String> getCustomersReportData(ArrayList<String> data) {
+		Statement stmt;
+		ArrayList<String> orderData = new ArrayList<>();
+		
+		String machineNumber = data.get(0);
+		String month = data.get(1);
+		String year = data.get(2);
+		
+		String datafromdb = "";
+		int j=1;
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT userName FROM project.reservation"
+					+ " where machineNumber = '" + machineNumber  + "'and month = '" + month + "'and year = '" + year +"';");
+			while (rs.next()) {
+				datafromdb = rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4)+ " " + rs.getString(5)+ " " + rs.getString(6);
+			}
+			
+			
+			if (datafromdb.length() > 1) {
+				String[] arrOfSub = ((String) datafromdb).split(" ");
+
+				for(int i=0; i<arrOfSub.length; i++) {
+					orderData.add(arrOfSub[i]);
+				}
+				/*orderData.add(arrOfSub[0]);
+				orderData.add(arrOfSub[1]);
+				orderData.add(arrOfSub[2]);
+				orderData.add(arrOfSub[3]);
+				orderData.add(arrOfSub[4]);
+				orderData.add(arrOfSub[5]);
+				orderData.add(arrOfSub[6]);
+				//orderData.add(arrOfSub[7]);**/
+				//System.out.println("blablabla111 "+ orderData.get(0));
+				rs.close();
+			}
+			else {
+				orderData.add("Error");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//System.out.println("blablabla222 "+ orderData);
+		return orderData;
+	}	
 	
 	
 	public static void signOutUser(String data) {
