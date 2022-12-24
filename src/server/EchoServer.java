@@ -23,6 +23,7 @@ public class EchoServer extends AbstractServer {
 	
 	
 	
+	
 	// Class variables *************************************************
 			static Connection conn;
 			private ArrayList<ConnectionToClient> clientConnected = new ArrayList<>();
@@ -33,6 +34,7 @@ public class EchoServer extends AbstractServer {
 			private Map<ConnectionToClient,String> userNamesOfUsers = new HashMap<>();
 			
 		//****************************************************************	
+			
 			
 			
 			
@@ -126,6 +128,13 @@ public class EchoServer extends AbstractServer {
 							client.sendToClient(machineNumberData);
 							data.clear();
 							break;
+						case "getMachineNumberForSetMinimum": //to get machine number for specific area
+							userName = userNamesOfUsers.get(client);
+							ArrayList<String> machineData = DB_Connection.getMachineData(userName);
+							machineData.add(0,"getMachineNumberForSetMinimum");
+							client.sendToClient(machineData);
+							data.clear();
+							break;
 						case "getOrderReportDetails": //get order report details
 							userName = userNamesOfUsers.get(client);
 							System.out.println("Message received: " + msg + " from " + client);
@@ -148,7 +157,7 @@ public class EchoServer extends AbstractServer {
 							client.sendToClient(costumerReportData);
 							data.clear();
 							break;
-						/*case "getInventoryReportDetails": //get order report details
+						case "getInventoryReportDetails": //get order report details
 							userName = userNamesOfUsers.get(client);
 							System.out.println("Message received: " + msg + " from " + client);
 							data.remove(0);
@@ -158,7 +167,7 @@ public class EchoServer extends AbstractServer {
 							inventoryReportData.add(0,"getInventoryReportDetails");
 							client.sendToClient(inventoryReportData);
 							data.clear();
-							break;*/
+							break;
 						
 							/*case "insert":
 							System.out.println("Message received: " + msg + " from " + client);
