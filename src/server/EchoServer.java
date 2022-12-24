@@ -168,6 +168,18 @@ public class EchoServer extends AbstractServer {
 							client.sendToClient(inventoryReportData);
 							data.clear();
 							break;
+						case "setMinimumLevelMachineDetails": //get machine's minimum level details
+							userName = userNamesOfUsers.get(client);
+							System.out.println("Message received: " + msg + " from " + client);
+							data.remove(0);
+							ArrayList<String> setMinimumLevelMachineData = DB_Connection.setMinimumLevelMachineData(data);
+							//DB_Connection.setMinimumLevelMachineData(data);
+							System.out.println(setMinimumLevelMachineData);
+							setMinimumLevelMachineData.add(0,"getMinimumLevelMachineDetails");
+							
+							client.sendToClient(setMinimumLevelMachineData);
+							data.clear();
+							break;
 						
 							/*case "insert":
 							System.out.println("Message received: " + msg + " from " + client);

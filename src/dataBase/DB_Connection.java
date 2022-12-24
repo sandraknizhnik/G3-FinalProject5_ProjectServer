@@ -233,6 +233,37 @@ public class DB_Connection {
 		return orderData;
 	}
 	
+	
+	public static ArrayList<String> setMinimumLevelMachineData(ArrayList<String> data) {
+		Statement stmt;
+		ArrayList<String> result = new ArrayList<>();
+		System.out.println("blabla2 "+ data);
+		try 
+		{
+			stmt = conn.createStatement();
+			String query = "update machines set minLevel = ? where machineNumber = ?";
+		      PreparedStatement preparedStmt = conn.prepareStatement(query);
+		      preparedStmt.setString   (1, data.get(1));
+		      preparedStmt.setString(2, data.get(0));
+		      
+		      // execute the java preparedstatement
+		      preparedStmt.executeUpdate();
+		      result.add("Success!");}
+		catch (SQLException e) {
+			e.printStackTrace();
+			result.add("Error!");
+		}
+		
+		System.out.println("Here2!");
+		return result;
+	}
+	
+	
+	
+	
+	
+	
+	
 	public static void signOutUser(String data) {
 		
 		try {
